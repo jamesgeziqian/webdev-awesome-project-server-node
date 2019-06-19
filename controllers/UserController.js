@@ -6,7 +6,7 @@ module.exports = (app) => {
     };
 
     const findAllUsers = (req, res) => {
-        userDao.findAllUsers().then((users) => res.json(user));
+        userDao.findAllUsers().then((users) => res.json(users));
     };
 
     const findUserById = (req, res) => {

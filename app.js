@@ -23,6 +23,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 require('./models/dbs');
+require('./controllers/UserController')(app);
+require('./controllers/CustomerController')(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

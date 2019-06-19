@@ -2,6 +2,7 @@ module.exports = (app) => {
     const userDao = require('../daos/UserDao');
 
     const createUser = (req, res) => {
+        console.log("createUser at dao");
         userDao.createUser(req.body).then((user) => res.json(user));
     };
 
@@ -14,7 +15,7 @@ module.exports = (app) => {
     };
 
     const updateUser = (req, res) => {
-        userDao.updateUser(req.params['uid'], req.body).then(() => res.sendStatus(200));
+        userDao.updateUser(req.params['uId'], req.body).then(() => res.sendStatus(200));
     };
 
     const deleteUser = (req, res) => {

@@ -7,6 +7,8 @@ const RestaurantSchema = new mongoose.Schema(
         openHours: [String],
         address: String,
         stars: Number,
+        yelpId: String,
+        favoringCustomers: [{type: mongoose.Schema.Types.ObjectId, ref: 'Customer'}],
         reviews: [String]
     }
 );

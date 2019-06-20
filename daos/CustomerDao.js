@@ -1,7 +1,6 @@
 const UserModel = require('../models/UserModel');
 
 const followUser = (userId, followingId) => {
-    console.log("inside Dao");
     return UserModel.CustomerModel.updateOne(
         {_id: userId},
         {

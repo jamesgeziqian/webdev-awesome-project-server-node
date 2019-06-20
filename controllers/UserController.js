@@ -7,11 +7,17 @@ module.exports = (app) => {
     };
 
     const findAllUsers = (req, res) => {
-        userDao.findAllUsers().then((users) => res.json(users));
+        userDao.findAllUsers()
+            .populate('followings')
+            .populate('followers')
+            .then((users) => res.json(users));
     };
 
     const findUserById = (req, res) => {
-        userDao.findUserById(req.params['uId']).then((user) => res.json(user));
+        userDao.findUserById(req.params['uId'])
+            .populate('followings')
+            .populate('followers')
+            .then((user) => res.json(user));
     };
 
     const updateUser = (req, res) => {

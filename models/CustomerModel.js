@@ -1,16 +1,15 @@
 const mongoose = require('mongoose');
-const RestaurantModel = require('./RestaurantModel');
 
 module.exports = (userModel) => {
-    userModel.discriminator(
+    return userModel.discriminator(
         'Customer',
         new mongoose.Schema(
             {
-                followings: [mongoose.Schema.Types.ObjectId],
-                followers: [mongoose.Schema.Types.ObjectId],
-                favorites: [mongoose.Schema.Types.ObjectId],
+                followings: [{type: mongoose.Schema.Types.ObjectId, ref: 'Customer'}],
+                followers: [{type: mongoose.Schema.Types.ObjectId, ref: 'Customer'}],
+                favorites: [{type: mongoose.Schema.Types.ObjectId, ref: 'RestaurantModel'}],
                 reviews: [{
-                    restaurant: mongoose.Schema.Types.ObjectId,
+                    restaurant: {type: mongoose.Schema.Types.ObjectId, ref: 'RestaurantModel'},
                     review: String
                 }]
             }));

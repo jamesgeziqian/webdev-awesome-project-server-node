@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const RestaurantSchema = require('./schemata/RestaurantSchema');
 
 module.exports = (userModel) => {
-    userModel.discriminator(
+    return userModel.discriminator(
         'Restaurateur',
         new mongoose.Schema(
             {

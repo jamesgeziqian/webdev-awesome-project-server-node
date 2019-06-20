@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const UserSchema = require('./schemata/UserSchema');
 
 const UserModel = mongoose.model('UserModel', UserSchema);
-require('./CustomerModel')(UserModel);
-require('./RestaurateurModel')(UserModel);
+const CustomerModel = require('./CustomerModel')(UserModel);
+const RestaurantModel = require('./RestaurateurModel')(UserModel);
 
-module.exports = UserModel;
+module.exports = {UserModel, CustomerModel, RestaurantModel};

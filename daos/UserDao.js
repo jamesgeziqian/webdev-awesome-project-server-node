@@ -1,18 +1,18 @@
 const UserModel = require('../models/UserModel');
 
-const createUser = (user) => UserModel.create(user);
+const createUser = (user) => UserModel.UserModel.create(user);
 
-const findAllUsers = () => UserModel.find();
+const findAllUsers = () => UserModel.UserModel.find();
 
-const findUserById = (userId) => UserModel.findById(userId);
+const findUserById = (userId) => UserModel.UserModel.findById(userId);
 
 const updateUser = (userId, newUser) =>
-    UserModel.update(
+    UserModel.UserModel.update(
         {_id: userId},
         {$set: {...newUser}}
     );
 
-const deleteUser = (userId) => UserModel.remove({_id: userId});
+const deleteUser = (userId) => UserModel.UserModel.remove({_id: userId});
 
 module.exports = {
     createUser,

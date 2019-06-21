@@ -55,6 +55,7 @@ module.exports = (app) => {
         userDao.findAllUsers()
             .populate('followings')
             .populate('followers')
+            .populate('restaurants')
             .then((users) => res.json(users));
     };
 
@@ -62,6 +63,7 @@ module.exports = (app) => {
         userDao.findUserById(req.params['uId'])
             .populate('followings')
             .populate('followers')
+            .populate('restaurants')
             .then((user) => res.json(user));
     };
 

@@ -7,7 +7,7 @@ module.exports = (app) => {
         RestaurantDao.findRestaurantByYelp(yelpId)
             .then((restaurant) => {
                 if (restaurant) {
-                    res.sendStatus(500);
+                    res.status(500).send("Restaurant has already been claimed!");
                 } else {
                     next();
                 }

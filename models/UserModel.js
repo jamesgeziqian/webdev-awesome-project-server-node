@@ -1,5 +1,14 @@
 const mongoose = require('mongoose');
-const UserSchema = require('./schemata/UserSchema');
+
+const UserSchema = new mongoose.Schema(
+    {
+        username: String,
+        password: String,
+        email: String
+    },
+    {
+        discriminatorKey: "userType"
+    });
 
 const UserModel = mongoose.model('UserModel', UserSchema);
 const CustomerModel = require('./CustomerModel')(UserModel);

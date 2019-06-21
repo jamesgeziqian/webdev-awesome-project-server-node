@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema(
         email: String
     },
     {
-        discriminatorKey: "type"
+        discriminatorKey: "userType"
     });
 
 module.exports = UserSchema;

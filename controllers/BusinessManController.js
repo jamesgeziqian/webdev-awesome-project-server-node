@@ -7,7 +7,8 @@ module.exports = (app) => {
         RestaurantDao.findRestaurantByYelp(yelpId)
             .then((restaurant) => {
                 if (restaurant) {
-                    res.status(500).send("Restaurant has already been claimed!");
+                    console.log(restaurant);
+                    res.status(500).send({"message": "Restaurant has already been claimed!"});
                 } else {
                     next();
                 }
@@ -18,7 +19,6 @@ module.exports = (app) => {
         const userId = req.params['uId'];
         const yelpId = req.params['yelpId'];
         if (req.session.username
-            && req.session.username === userId
             && req.session.userType === 'BusinessMan') {
             RestaurantDao.createRestaurant(
                 {

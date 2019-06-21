@@ -6,7 +6,6 @@ module.exports = (app) => {
         const userId = req.params['uId'];
         const followingId = req.params['followingId'];
         if (req.session.username
-            && req.session.username === userId
             && req.session.userType === 'Customer') {
             CustomerDao.followUser(userId, followingId)
                 .then((respond) => UserDao.findUserById(userId))
@@ -20,7 +19,6 @@ module.exports = (app) => {
         const userId = req.params['uId'];
         const restaurantId = req.params['rId'];
         if  (req.session.username
-            && req.session.username === userId
             && req.session.userType === 'Customer') {
             CustomerDao.favorRestaurant(userId, restaurantId)
                 .then((respond) => res.json(respond));

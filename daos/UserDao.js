@@ -6,6 +6,8 @@ const findAllUsers = () => UserModel.UserModel.find();
 
 const findUserById = (userId) => UserModel.UserModel.findById(userId);
 
+const findUser = (condition) => UserModel.UserModel.findOne(condition);
+
 const updateUser = (userId, newUser) =>
     UserModel.UserModel.update(
         {_id: userId},
@@ -18,6 +20,7 @@ module.exports = {
     createUser,
     findAllUsers,
     findUserById,
+    findUser,
     updateUser,
     deleteUser
 };

@@ -15,7 +15,7 @@ const claimRestaurant = (userId, restaurantId) => {
             console.log(doc);
         }
     ).then(() =>
-        UserModel.updateOne(
+        UserModel.BusinessManModel.updateOne(
             {_id: userId},
             {
                 $addToSet: {

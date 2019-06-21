@@ -13,7 +13,8 @@ module.exports = (app) => {
     const favorRestaurant = (req, res) => {
         const userId = req.params['uId'];
         const restaurantId = req.params['rId'];
-        CustomerDao.favorRestaurant(userId, restaurantId);
+        CustomerDao.favorRestaurant(userId, restaurantId)
+            .then((respond) => res.json(respond));
     };
 
     app.put('/api/user/:uId/follows/:followingId', followCustomer);

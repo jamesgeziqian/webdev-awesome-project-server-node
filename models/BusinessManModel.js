@@ -3,7 +3,7 @@ const RestaurantSchema = require('./schemata/RestaurantSchema');
 
 module.exports = (userModel) => {
     return userModel.discriminator(
-        'Restaurateur',
+        'BusinessMan',
         new mongoose.Schema(
             {
                 restaurants: [{type: mongoose.Schema.Types.ObjectId, ref: RestaurantSchema}]

@@ -20,6 +20,8 @@ app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
 app.use(session({
   secret: "ciao, awesome",
+  resave: false,
+  saveUninitialized: true
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 

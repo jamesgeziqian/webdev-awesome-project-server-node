@@ -2,18 +2,18 @@ module.exports = (app) => {
     const userDao = require('../daos/UserDao');
 
     const login = (req, res) => {
-        const session = req.session;
-        if (!session.username){
+        if (!req.session.username){
             userDao.findUser(
                 {username: req.body.username, password: req.body.password}
                 ).then((user) => {
                     if (user) {
-                        session.regenerate(req,(err) => {
+                        req.session.regenerate(function(err) {
                             if (err) {
                                 console.log("session regenerating error");
                                 return console.log(err);
                             } else {
-                                session.username = req.body.username;
+                                req.session.username = req.body.username;
+                                req.session.save();
                                 res.status(200).send({"message": "Login success"});
                             }
                         });
@@ -26,10 +26,15 @@ module.exports = (app) => {
         }
     };
 
+    const profile = (req, res) => {
+        console.log(req.sessionID);
+        console.log(req.session);
+        res.status(200).send({"message": "here"});
+    };
+
     const logout = (req, res) => {
-        const session = req.session;
-        if (session.username) {
-            session.destroy((err) => {
+        if (req.session.username) {
+            req.session.destroy((err) => {
                 if (err) {
                     console.log("session destroying error");
                     console.log(err);
@@ -71,6 +76,8 @@ module.exports = (app) => {
 
     app.post('/api/login', login);
     app.post('/api/logout', logout);
+
+    app.get('/api/profile', profile);
 
     app.post('/api/user', createUser);
     app.get('/api/user', findAllUsers);

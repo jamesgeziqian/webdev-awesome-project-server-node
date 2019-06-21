@@ -2,9 +2,15 @@ const UserModel = require('../models/UserModel');
 
 const createUser = (user) => UserModel.UserModel.create(user);
 
-const findAllUsers = () => UserModel.UserModel.find({}, {"password": 0});
+const findAllUsers = () => UserModel.UserModel.find(
+    {},
+    {"password": 0, "email": 0, "phone": 0, "zip": 0}
+    );
 
-const findUserById = (userId) => UserModel.UserModel.findById(userId, {"password": 0});
+const findUserById = (userId) => UserModel.UserModel.findById(
+    userId,
+    {"password": 0, "email": 0, "phone": 0, "zip": 0}
+    );
 
 const findUser = (condition) => UserModel.UserModel.findOne(condition);
 

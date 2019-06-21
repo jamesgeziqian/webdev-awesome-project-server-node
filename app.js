@@ -24,6 +24,7 @@ app.use('/users', usersRouter);
 
 require('./models/dbs');
 require('./controllers/CustomerController')(app);
+require('./controllers/BusinessManController')(app);
 require('./controllers/UserController')(app);
 
 // catch 404 and forward to error handler

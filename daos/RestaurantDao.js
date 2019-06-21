@@ -6,6 +6,8 @@ const findAllRestaurants = () => RestaurantModel.find();
 
 const findRestaurantById = (restaurantId) => RestaurantModel.findById(restaurantId);
 
+const findRestaurantByYelp = (yelpId) => RestaurantModel.findOne({yelpId: yelpId});
+
 const updateRestaurant = (restaurantId, newRestaurant) =>
     RestaurantModel.update(
         {_id: restaurantId},
@@ -18,6 +20,7 @@ module.exports = {
     createRestaurant,
     findAllRestaurants,
     findRestaurantById,
+    findRestaurantByYelp,
     updateRestaurant,
     deleteRestaurant
 };

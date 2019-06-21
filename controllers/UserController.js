@@ -2,7 +2,7 @@ module.exports = (app) => {
     const userDao = require('../daos/UserDao');
 
     const login = (req, res) => {
-        if (!req.session.username){
+        if (!req.session.userId){
             userDao.findUser(
                 {username: req.body.username, password: req.body.password}
                 ).then((user) => {
@@ -12,7 +12,7 @@ module.exports = (app) => {
                                 console.log("session regenerating error");
                                 return console.log(err);
                             } else {
-                                req.session.username = req.body.username;
+                                req.session.userId = user._id;
                                 req.session.userType = user.userType;
                                 req.session.save();
                                 res.status(200).send({"message": "Login success"});
@@ -28,11 +28,21 @@ module.exports = (app) => {
     };
 
     const profile = (req, res) => {
-        res.status(200).send({"message": "here"});
+        if (req.session.userId && req.session.userId === req.params['uId']) {
+            userDao.findUser({_id: req.params['uId']})
+                .then((user) => {
+                    res.send(user);
+                });
+        } else {
+            userDao.findUserById(req.params['uId'])
+                .then((user) => {
+                    res.send(user);
+                });
+        }
     };
 
     const logout = (req, res) => {
-        if (req.session.username) {
+        if (req.session.userId) {
             req.session.destroy((err) => {
                 if (err) {
                     console.log("session destroying error");
@@ -78,7 +88,7 @@ module.exports = (app) => {
     app.post('/api/login', login);
     app.post('/api/logout', logout);
 
-    app.get('/api/profile', profile);
+    app.get('/api/profile/:uId', profile);
 
     app.post('/api/user', createUser);
     app.get('/api/user', findAllUsers);

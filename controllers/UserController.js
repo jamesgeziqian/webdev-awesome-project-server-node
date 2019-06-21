@@ -13,6 +13,7 @@ module.exports = (app) => {
                                 return console.log(err);
                             } else {
                                 req.session.username = req.body.username;
+                                req.session.userType = user.userType;
                                 req.session.save();
                                 res.status(200).send({"message": "Login success"});
                             }
@@ -27,8 +28,6 @@ module.exports = (app) => {
     };
 
     const profile = (req, res) => {
-        console.log(req.sessionID);
-        console.log(req.session);
         res.status(200).send({"message": "here"});
     };
 

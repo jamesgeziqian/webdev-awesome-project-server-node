@@ -5,16 +5,28 @@ module.exports = (app) => {
     const followCustomer = (req, res) => {
         const userId = req.params['uId'];
         const followingId = req.params['followingId'];
-        CustomerDao.followUser(userId, followingId)
-            .then((respond) => UserDao.findUserById(userId))
-            .then((user) => res.json(user));
+        if (req.session.username
+            && req.session.username === userId
+            && req.session.userType === 'Customer') {
+            CustomerDao.followUser(userId, followingId)
+                .then((respond) => UserDao.findUserById(userId))
+                .then((user) => res.json(user));
+        } else {
+            res.status(500).send({"message": "You have not logged in."});
+        }
     };
 
     const favorRestaurant = (req, res) => {
         const userId = req.params['uId'];
         const restaurantId = req.params['rId'];
-        CustomerDao.favorRestaurant(userId, restaurantId)
-            .then((respond) => res.json(respond));
+        if  (req.session.username
+            && req.session.username === userId
+            && req.session.userType === 'Customer') {
+            CustomerDao.favorRestaurant(userId, restaurantId)
+                .then((respond) => res.json(respond));
+        } else {
+            res.status(500).send({"message": "You have not logged in."});
+        }
     };
 
     app.put('/api/user/:uId/follows/:followingId', followCustomer);

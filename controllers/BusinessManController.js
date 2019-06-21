@@ -17,13 +17,19 @@ module.exports = (app) => {
     const claimRestaurant = (req, res) => {
         const userId = req.params['uId'];
         const yelpId = req.params['yelpId'];
-        RestaurantDao.createRestaurant(
-            {
-                yelpId: yelpId
-            }
-        ).then((restaurant) =>
-            BusinessManDao.claimRestaurant(userId, restaurant._id)
-        ).then((respond) => res.json(respond));
+        if (req.session.username
+            && req.session.username === userId
+            && req.session.userType === 'BusinessMan') {
+            RestaurantDao.createRestaurant(
+                {
+                    yelpId: yelpId
+                }
+            ).then((restaurant) =>
+                BusinessManDao.claimRestaurant(userId, restaurant._id)
+            ).then((respond) => res.json(respond));
+        } else {
+            res.status(500).send({"message": "You have not logged in."});
+        }
     };
 
     app.put('/api/business/:uId/restaurant/:yelpId', checkClaimed, claimRestaurant);

@@ -24,7 +24,7 @@ const claimRestaurant = (userId, restaurantId) => {
             },
             (err, doc) => {
                 if (err) return console.log(err);
-                console.log("successfully add owner");
+                console.log("successfully add restaurant");
                 console.log(doc);
             }
         )

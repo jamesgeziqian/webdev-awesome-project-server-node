@@ -8,9 +8,6 @@ module.exports = (userModel) => {
                 followings: [{type: mongoose.Schema.Types.ObjectId, ref: 'Customer'}],
                 followers: [{type: mongoose.Schema.Types.ObjectId, ref: 'Customer'}],
                 favorites: [{type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant'}],
-                reviews: [{
-                    restaurant: {type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant'},
-                    review: String
-                }]
+                orders: [{type: mongoose.Schema.Types.ObjectId, ref: 'Order'}]
             }));
 };

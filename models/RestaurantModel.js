@@ -10,7 +10,7 @@ const RestaurantSchema = new mongoose.Schema(
         stars: Number,
         yelpId: String,
         favoringCustomers: [{type: mongoose.Schema.Types.ObjectId, ref: 'Customer'}],
-        reviews: [String]
+        historyOrders: [{type: mongoose.Schema.Types.ObjectId, ref: 'Order'}]
     }
 );
 

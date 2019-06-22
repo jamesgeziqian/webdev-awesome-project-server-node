@@ -2,26 +2,26 @@ module.exports = (app) => {
     const userDao = require('../daos/UserDao');
 
     const login = (req, res) => {
-        if (!req.session.userId){
+        if (!req.session.userId) {
             userDao.findUser(
                 {username: req.body.username, password: req.body.password}
-                ).then((user) => {
-                    if (user) {
-                        req.session.regenerate(function(err) {
-                            if (err) {
-                                console.log("session regenerating error");
-                                return console.log(err);
-                            } else {
-                                req.session.userId = user._id;
-                                req.session.userType = user.userType;
-                                req.session.save();
-                                res.status(200).send({"message": "Login success"});
-                            }
-                        });
-                    } else {
-                        res.status(500).send({"message": "Login failed"});
-                    }
-                })
+            ).then((user) => {
+                if (user) {
+                    req.session.regenerate((err) => {
+                        if (err) {
+                            console.log("session regenerating error");
+                            return console.log(err);
+                        } else {
+                            req.session.userId = user._id;
+                            req.session.userType = user.userType;
+                            req.session.save();
+                            res.status(200).send({"message": "Login success"});
+                        }
+                    });
+                } else {
+                    res.status(500).send({"message": "Login failed"});
+                }
+            })
         } else {
             res.status(200).send({"message": "Already logged in"});
         }
@@ -31,12 +31,21 @@ module.exports = (app) => {
         if (req.session.userId
             && req.session.userId === req.params['uId']) {
             userDao.findUser({_id: req.params['uId']})
+                .populate('followings')
+                .populate('followers')
+                .populate('restaurants')
+                .populate('orders')
                 .then((user) => {
                     res.send(user);
                 });
         } else {
             userDao.findUserById(req.params['uId'])
+                .populate('followings')
+                .populate('followers')
+                .populate('restaurants')
+                .populate('orders')
                 .then((user) => {
+                    console.log(user);
                     res.send(user);
                 });
         }
@@ -66,6 +75,17 @@ module.exports = (app) => {
         }
     };
 
+    const checkUsername = (req, res, next) => {
+        userDao.findUser({username: req.body.username})
+            .then((user) => {
+                if (user) {
+                    res.status(403).send({"message": "username is used by someone else"});
+                } else {
+                    next();
+                }
+            })
+    };
+
     const createUser = (req, res) => {
         userDao.createUser(req.body).then((user) => res.json(user));
     };
@@ -75,6 +95,7 @@ module.exports = (app) => {
             .populate('followings')
             .populate('followers')
             .populate('restaurants')
+            .populate('orders')
             .then((users) => res.json(users));
     };
 
@@ -101,7 +122,7 @@ module.exports = (app) => {
 
     app.get('/api/profile/:uId', profile);
 
-    app.post('/api/user', createUser);
+    app.post('/api/user', checkUsername, createUser);
     app.get('/api/user', findAllUsers);
     app.get('/api/user/:uId', findUserById);
     app.put('/api/user/:uId', updateUser);

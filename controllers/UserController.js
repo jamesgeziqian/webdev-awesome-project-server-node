@@ -28,7 +28,8 @@ module.exports = (app) => {
     };
 
     const profile = (req, res) => {
-        if (req.session.userId && req.session.userId === req.params['uId']) {
+        if (req.session.userId
+            && req.session.userId === req.params['uId']) {
             userDao.findUser({_id: req.params['uId']})
                 .then((user) => {
                     res.send(user);
@@ -38,6 +39,14 @@ module.exports = (app) => {
                 .then((user) => {
                     res.send(user);
                 });
+        }
+    };
+
+    const checkLogin = (req, res) => {
+        if (req.session.userId) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(403);
         }
     };
 
@@ -74,6 +83,7 @@ module.exports = (app) => {
             .populate('followings')
             .populate('followers')
             .populate('restaurants')
+            .populate('orders')
             .then((user) => res.json(user));
     };
 
@@ -87,6 +97,7 @@ module.exports = (app) => {
 
     app.post('/api/login', login);
     app.post('/api/logout', logout);
+    app.get('/api/checkLogin', checkLogin);
 
     app.get('/api/profile/:uId', profile);
 

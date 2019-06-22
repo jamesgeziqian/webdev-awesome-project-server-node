@@ -7,17 +7,10 @@ module.exports = (app) => {
                 {username: req.body.username, password: req.body.password}
             ).then((user) => {
                 if (user) {
-                    req.session.regenerate((err) => {
-                        if (err) {
-                            console.log("session regenerating error");
-                            return console.log(err);
-                        } else {
-                            req.session.userId = user._id;
-                            req.session.userType = user.userType;
-                            req.session.save();
-                            res.status(200).send({"message": "Login success"});
-                        }
-                    });
+                    req.session.userId = user._id;
+                    req.session.userType = user.userType;
+                    req.session.save();
+                    res.status(200).send({"message": "Login success"});
                 } else {
                     res.status(500).send({"message": "Login failed"});
                 }

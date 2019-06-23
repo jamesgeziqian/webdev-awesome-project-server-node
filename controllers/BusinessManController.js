@@ -8,7 +8,7 @@ module.exports = (app) => {
             .then((restaurant) => {
                 if (restaurant) {
                     console.log(restaurant);
-                    res.status(500).send({"message": "Restaurant has already been claimed!"});
+                    res.status(403).send({"message": "Restaurant has already been claimed!"});
                 } else {
                     next();
                 }
@@ -27,7 +27,7 @@ module.exports = (app) => {
                 BusinessManDao.claimRestaurant(req.session.userId, restaurant._id)
             ).then((respond) => res.json(respond));
         } else {
-            res.status(500).send({"message": "You have not logged in."});
+            res.status(403).send({"message": "You have not logged in."});
         }
     };
 
@@ -39,9 +39,9 @@ module.exports = (app) => {
                     res.status(404).send({"message": "Restaurant is not been hosted"})
                 } else if (!req.session.userId
                     || req.session.userType !== 'BusinessMan') {
-                    res.status(500).send({"message": "You have not logged in."});
+                    res.status(403).send({"message": "You have not logged in."});
                 } else if (restaurant.owner !== req.session.userId) {
-                    res.status(500).send({"message": "You do not own this restaurant"});
+                    res.status(403).send({"message": "You do not own this restaurant"});
                 } else {
                     next();
                 }

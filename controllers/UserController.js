@@ -58,7 +58,7 @@ module.exports = (app) => {
                     res.send(user);
                 });
         } else {
-            res.status(500).send({"message": "You are not logged in"})
+            res.status(403).send({"message": "You are not logged in"})
         }
     };
 
@@ -145,17 +145,7 @@ module.exports = (app) => {
 
     app.post('/api/login', login);
     app.post('/api/logout', logout);
-    app.get('/api/checkLogin', checkLogin, (req, res) => {
-        userDao.findUserById(res.session.userId)
-            .populate('followings')
-            .populate('followers')
-            .populate('restaurants')
-            .populate('orders')
-            .populate('orders.restaurant')
-            .then((user) => {
-                res.status(200).send({"message": "You are logged in", "user": user})
-            });
-    });
+    app.get('/api/checkLogin', checkLogin, (req, res) => res.status(200).send({"message": "You are logged in"}));
 
     app.get('/api/profile/:uId', profile);
     app.get('/api/profile', profileLogIn);

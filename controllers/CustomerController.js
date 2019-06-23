@@ -14,7 +14,7 @@ module.exports = (app) => {
                 .then((respond) => UserDao.findUserById(userId))
                 .then((user) => res.json(user));
         } else {
-            res.status(500).send({"message": "You have not logged in."});
+            res.status(403).send({"message": "You have not logged in."});
         }
     };
 
@@ -27,7 +27,7 @@ module.exports = (app) => {
             CustomerDao.favorRestaurant(userId, restaurantId)
                 .then((respond) => res.json(respond));
         } else {
-            res.status(500).send({"message": "You have not logged in."});
+            res.status(403).send({"message": "You have not logged in."});
         }
     };
 
@@ -57,7 +57,7 @@ module.exports = (app) => {
                 res.send(order);
             })
         } else {
-            res.status(500).send({"message": "You have not logged in."});
+            res.status(403).send({"message": "You have not logged in."});
         }
     };
 

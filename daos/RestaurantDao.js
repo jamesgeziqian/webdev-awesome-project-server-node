@@ -12,6 +12,8 @@ const updateRestaurant = (restaurantId, newRestaurant) =>
     RestaurantModel.update(
         {_id: restaurantId},
         {$set: {...newRestaurant}}
+    ).then(() =>
+        RestaurantModel.findById(restaurantId)
     );
 
 const deleteRestaurant = (restaurantId) => RestaurantModel.remove({_id: restaurantId});

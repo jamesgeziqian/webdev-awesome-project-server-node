@@ -40,7 +40,7 @@ module.exports = (app) => {
                 } else if (!req.session.userId
                     || req.session.userType !== 'BusinessMan') {
                     res.status(403).send({"message": "You have not logged in."});
-                } else if (restaurant.owner !== req.session.userId) {
+                } else if (restaurant.owner.toString() !== req.session.userId.toString()) {
                     res.status(403).send({"message": "You do not own this restaurant"});
                 } else {
                     next();
@@ -51,7 +51,7 @@ module.exports = (app) => {
     const updateRestaurant = (req, res) => {
         const restaurantId = req.params['restaurantId'];
         RestaurantDao.updateRestaurant(restaurantId, req.body)
-            .then(() => res.send({"message": "Successfully dropped restaurant"}))
+            .then((restaurant) => res.send(restaurant));
     };
 
     const dropRestaurant = (req, res) => {

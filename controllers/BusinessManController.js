@@ -16,17 +16,15 @@ module.exports = (app) => {
     };
 
     const claimRestaurant = (req, res) => {
-        const userId = req.params['uId'];
         const yelpId = req.params['yelpId'];
         if (req.session.userId
-            && req.session.userId === req.params['uId']
             && req.session.userType === 'BusinessMan') {
             RestaurantDao.createRestaurant(
                 {
                     yelpId: yelpId
                 }
             ).then((restaurant) =>
-                BusinessManDao.claimRestaurant(userId, restaurant._id)
+                BusinessManDao.claimRestaurant(req.session.userId, restaurant._id)
             ).then((respond) => res.json(respond));
         } else {
             res.status(500).send({"message": "You have not logged in."});
@@ -34,14 +32,12 @@ module.exports = (app) => {
     };
 
     const checkRestaurantForUpdate = (req, res, next) => {
-        const userId = req.params['uId'];
         const restaurantId = req.params['restaurantId'];
         RestaurantDao.findRestaurantById(restaurantId)
             .then((restaurant) => {
                 if (!restaurant) {
                     res.status(404).send({"message": "Restaurant is not been hosted"})
                 } else if (!req.session.userId
-                    || req.session.userId !== userId
                     || req.session.userType !== 'BusinessMan') {
                     res.status(500).send({"message": "You have not logged in."});
                 } else if (restaurant.owner !== req.session.userId) {
@@ -64,7 +60,7 @@ module.exports = (app) => {
             .then(() => res.send({"message": "Successfully dropped restaurant"}))
     };
 
-    app.post('/api/business/:uId/restaurant/:yelpId', checkClaimed, claimRestaurant);
-    app.put('/api/business/:uId/restaurant/:restaurantId', checkRestaurantForUpdate, updateRestaurant);
-    app.delete('/api/business/:uId/restaurant/:restaurantId', checkRestaurantForUpdate, dropRestaurant);
+    app.post('/api/restaurant/:yelpId', checkClaimed, claimRestaurant);
+    app.put('/api/restaurant/:restaurantId', checkRestaurantForUpdate, updateRestaurant);
+    app.delete('/api/restaurant/:restaurantId', checkRestaurantForUpdate, dropRestaurant);
 };

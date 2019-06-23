@@ -28,6 +28,8 @@ const claimRestaurant = (userId, restaurantId) => {
                 console.log(doc);
             }
         )
+    ).then(() =>
+        RestaurantModel.findOne({_id: restaurantId})
     )
 };
 

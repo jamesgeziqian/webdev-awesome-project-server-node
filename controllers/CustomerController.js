@@ -31,13 +31,27 @@ module.exports = (app) => {
         }
     };
 
+    const unfollowUser = (req, res) => {
+        const userId = req.params['uId'];
+        const followingId = req.params['followingId'];
+        if (req.session.userId
+            && req.session.userId === req.params['uId']
+            && req.session.userType === 'Customer') {
+            CustomerDao.unfollowUser(userId, followingId)
+                .then((respond) => UserDao.findUserById(userId))
+                .then((user) => res.json(user));
+        } else {
+            res.status(403).send({"message": "You have not logged in."});
+        }
+    };
+
     const dislikeRestaurant = (req, res) => {
         const userId = req.params['uId'];
         const restaurantId = req.params['rId'];
         if  (req.session.userId
             && req.session.userId === req.params['uId']
             && req.session.userType === 'Customer') {
-            CustomerDao.favorRestaurant(userId, restaurantId)
+            CustomerDao.dislikeRestaurant(userId, restaurantId)
                 .then((respond) => res.json(respond));
         } else {
             res.status(403).send({"message": "You have not logged in."});
@@ -75,6 +89,8 @@ module.exports = (app) => {
     app.put('/api/user/:uId/follows/:followingId', followCustomer);
 
     app.put('/api/customer/:uId/restaurant/:rId', favorRestaurant);
+
+    app.delete('/api/user/:uId/follows/:followingId', unfollowUser);
 
     app.delete('/api/customer/:uId/restaurant/:rId', dislikeRestaurant);
 

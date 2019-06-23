@@ -2,7 +2,6 @@ const createError = require('http-errors');
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-// const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const logger = require('morgan');
 
@@ -18,14 +17,16 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// app.use(cookieParser());
 app.use(session({
   secret: "ciao, awesome",
   resave: false,
   saveUninitialized: true
 }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:3001",
+  credentials: true
+}));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

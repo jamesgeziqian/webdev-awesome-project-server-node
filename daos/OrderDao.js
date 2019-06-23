@@ -5,7 +5,7 @@ const UserModel = require('../models/UserModel');
 const createOrder = (order) =>
     OrderModel.create(order)
         .then((respond) => {
-            UserModel.CustomerModel.findOneAndUpdate(
+            UserModel.CustomerModel.updateOne(
                 {_id: respond.customer},
                 {
                     $addToSet: {
@@ -17,7 +17,7 @@ const createOrder = (order) =>
                     console.log("successfully updated user");
                     console.log(doc);
                 });
-            RestaurantModel.findOneAndUpdate(
+            RestaurantModel.updateOne(
                 {_id: respond.restaurant},
                 {
                     $addToSet: {

@@ -123,7 +123,7 @@ module.exports = (app) => {
     };
 
     const updateUser = (req, res) => {
-        userDao.updateUser(req.params['uId'], req.body).then(() => res.sendStatus(200));
+        userDao.updateUser(req.params['uId'], req.body).then(() => res.status(200).send({"message": "Update success!"}));
     };
 
     const deleteUser = (req, res) => {

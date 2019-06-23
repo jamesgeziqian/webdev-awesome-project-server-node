@@ -44,11 +44,11 @@ module.exports = (app) => {
         }
     };
 
-    const checkLogin = (req, res) => {
+    const checkLogin = (req, res, next) => {
         if (req.session.userId) {
-            res.sendStatus(200);
+            next();
         } else {
-            res.sendStatus(403);
+            res.status(403).send({"message": "You are not logged in"});
         }
     };
 
@@ -76,7 +76,7 @@ module.exports = (app) => {
                 } else {
                     next();
                 }
-            })
+            });
     };
 
     const createUser = (req, res) => {
@@ -117,13 +117,13 @@ module.exports = (app) => {
 
     app.post('/api/login', login);
     app.post('/api/logout', logout);
-    app.get('/api/checkLogin', checkLogin);
+    app.get('/api/checkLogin', checkLogin, (req, res) => res.status(200).send({"message": "You are logged in"}));
 
     app.get('/api/profile/:uId', profile);
 
     app.post('/api/user', checkUsername, createUser);
     app.get('/api/user', findAllUsers);
     app.get('/api/user/:uId', findUserById);
-    app.put('/api/user/:uId', updateUser);
+    app.put('/api/user/:uId', checkLogin, checkUsername, updateUser);
     app.delete('/api/user/:uId', deleteUser);
 };

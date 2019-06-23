@@ -80,7 +80,13 @@ module.exports = (app) => {
     };
 
     const createUser = (req, res) => {
-        userDao.createUser(req.body).then((user) => res.json(user));
+        userDao.createUser(req.body).then((user) => {
+            req.session.userId = user._id;
+            req.session.userType = user.userType;
+            req.session.save();
+            res.status(200).send({"message": "Login success"});
+            res.json(user);
+        });
     };
 
     const findAllUsers = (req, res) => {

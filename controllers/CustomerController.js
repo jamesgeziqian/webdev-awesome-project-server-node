@@ -86,11 +86,11 @@ module.exports = (app) => {
         }
     };
 
-    app.put('/api/user/:uId/follows/:followingId', followCustomer);
+    app.put('/api/customer/:uId/follows/:followingId', followCustomer);
 
     app.put('/api/customer/:uId/restaurant/:rId', favorRestaurant);
 
-    app.delete('/api/user/:uId/follows/:followingId', unfollowUser);
+    app.delete('/api/customer/:uId/follows/:followingId', unfollowUser);
 
     app.delete('/api/customer/:uId/restaurant/:rId', dislikeRestaurant);
 

@@ -26,6 +26,6 @@ module.exports = (app) => {
             });
     };
 
-    app.get('./api/restaurant/:yelpId', findRestaurantByYelp);
-    app.get('./api/restaurant', findAllRestaurants);
+    app.get('/api/restaurant/:yelpId', findRestaurantByYelp);
+    app.get('/api/restaurant', findAllRestaurants);
 };

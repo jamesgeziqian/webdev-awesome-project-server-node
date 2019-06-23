@@ -110,7 +110,7 @@ module.exports = (app) => {
             req.session.userId = user._id;
             req.session.userType = user.userType;
             req.session.save();
-            res.status(200).json(user);
+            res.status(200).json({"message": "Login success"});
         });
     };
 

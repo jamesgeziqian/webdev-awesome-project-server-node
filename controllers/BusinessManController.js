@@ -33,5 +33,38 @@ module.exports = (app) => {
         }
     };
 
-    app.put('/api/business/:uId/restaurant/:yelpId', checkClaimed, claimRestaurant);
+    const checkRestaurantForUpdate = (req, res, next) => {
+        const userId = req.params['uId'];
+        const restaurantId = req.params['restaurantId'];
+        RestaurantDao.findRestaurantById(restaurantId)
+            .then((restaurant) => {
+                if (!restaurant) {
+                    res.status(404).send({"message": "Restaurant is not been hosted"})
+                } else if (!req.session.userId
+                    || req.session.userId !== userId
+                    || req.session.userType !== 'BusinessMan') {
+                    res.status(500).send({"message": "You have not logged in."});
+                } else if (restaurant.owner !== req.session.userId) {
+                    res.status(500).send({"message": "You do not own this restaurant"});
+                } else {
+                    next();
+                }
+            })
+    };
+
+    const updateRestaurant = (req, res) => {
+        const restaurantId = req.params['restaurantId'];
+        RestaurantDao.updateRestaurant(restaurantId, req.body)
+            .then(() => res.send({"message": "Successfully dropped restaurant"}))
+    };
+
+    const dropRestaurant = (req, res) => {
+        const restaurantId = req.params['restaurantId'];
+        RestaurantDao.deleteRestaurant(restaurantId)
+            .then(() => res.send({"message": "Successfully dropped restaurant"}))
+    };
+
+    app.post('/api/business/:uId/restaurant/:yelpId', checkClaimed, claimRestaurant);
+    app.put('/api/business/:uId/restaurant/:restaurantId', checkRestaurantForUpdate, updateRestaurant);
+    app.delete('/api/business/:uId/restaurant/:restaurantId', checkRestaurantForUpdate, dropRestaurant);
 };

@@ -35,6 +35,7 @@ require('./models/dbs');
 require('./controllers/CustomerController')(app);
 require('./controllers/BusinessManController')(app);
 require('./controllers/UserController')(app);
+require('./controllers/RestaurantController')(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -28,6 +28,7 @@ module.exports = (app) => {
                 .populate('followers')
                 .populate('restaurants')
                 .populate('orders')
+                .populate('orders.restaurant')
                 .then((user) => {
                     res.send(user);
                 });
@@ -37,6 +38,7 @@ module.exports = (app) => {
                 .populate('followers')
                 .populate('restaurants')
                 .populate('orders')
+                .populate('orders.restaurant')
                 .then((user) => {
                     console.log(user);
                     res.send(user);
@@ -51,6 +53,7 @@ module.exports = (app) => {
                 .populate('followers')
                 .populate('restaurants')
                 .populate('orders')
+                .populate('orders.restaurant')
                 .then((user) => {
                     res.send(user);
                 });
@@ -118,6 +121,7 @@ module.exports = (app) => {
             .populate('followers')
             .populate('restaurants')
             .populate('orders')
+            .populate('orders.restaurant')
             .then((users) => res.json(users));
     };
 
@@ -141,7 +145,17 @@ module.exports = (app) => {
 
     app.post('/api/login', login);
     app.post('/api/logout', logout);
-    app.get('/api/checkLogin', checkLogin, (req, res) => res.status(200).send({"message": "You are logged in"}));
+    app.get('/api/checkLogin', checkLogin, (req, res) => {
+        userDao.findUserById(res.session.userId)
+            .populate('followings')
+            .populate('followers')
+            .populate('restaurants')
+            .populate('orders')
+            .populate('orders.restaurant')
+            .then((user) => {
+                res.status(200).send({"message": "You are logged in", "user": user})
+            });
+    });
 
     app.get('/api/profile/:uId', profile);
     app.get('/api/profile', profileLogIn);

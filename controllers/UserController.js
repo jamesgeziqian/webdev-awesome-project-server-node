@@ -67,6 +67,14 @@ module.exports = (app) => {
         }
     };
 
+    const checkLoginUserId = (req, res, next) => {
+        if (req.session.userId && req.session.userId === req.params['uId']) {
+            next();
+        } else {
+            res.status(403).send({"message": "You are not logged in as this user"});
+        }
+    };
+
     const logout = (req, res) => {
         if (req.session.userId) {
             req.session.destroy((err) => {
@@ -119,6 +127,7 @@ module.exports = (app) => {
             .populate('followers')
             .populate('restaurants')
             .populate('orders')
+            .populate('orders.restaurant')
             .then((user) => res.json(user));
     };
 
@@ -140,6 +149,6 @@ module.exports = (app) => {
     app.post('/api/user', checkUsername, createUser);
     app.get('/api/user', findAllUsers);
     app.get('/api/user/:uId', findUserById);
-    app.put('/api/user/:uId', checkLogin, checkUsername, updateUser);
-    app.delete('/api/user/:uId', deleteUser);
+    app.put('/api/user/:uId', checkLoginUserId, checkUsername, updateUser);
+    app.delete('/api/user/:uId', checkLoginUserId, deleteUser);
 };

@@ -31,6 +31,19 @@ module.exports = (app) => {
         }
     };
 
+    const dislikeRestaurant = (req, res) => {
+        const userId = req.params['uId'];
+        const restaurantId = req.params['rId'];
+        if  (req.session.userId
+            && req.session.userId === req.params['uId']
+            && req.session.userType === 'Customer') {
+            CustomerDao.favorRestaurant(userId, restaurantId)
+                .then((respond) => res.json(respond));
+        } else {
+            res.status(403).send({"message": "You have not logged in."});
+        }
+    };
+
     const checkRestaurant = (req, res, next) => {
         const restaurantId = req.params['rId'];
         RestaurantDao.findRestaurantById(restaurantId)
@@ -44,14 +57,12 @@ module.exports = (app) => {
     };
 
     const makeOrder = (req, res) => {
-        const userId = req.params['uId'];
         const restaurantId = req.params['rId'];
         if  (req.session.userId
-            && req.session.userId === req.params['uId']
             && req.session.userType === 'Customer') {
             OrderDao.createOrder({
                 restaurant: restaurantId,
-                customer: userId,
+                customer: req.session.userId,
                 orders: req.body
             }).then((order) => {
                 res.send(order);
@@ -65,5 +76,7 @@ module.exports = (app) => {
 
     app.put('/api/customer/:uId/restaurant/:rId', favorRestaurant);
 
-    app.post('/api/customer/:uId/restaurant/:rId', checkRestaurant, makeOrder);
+    app.delete('/api/customer/:uId/restaurant/:rId', dislikeRestaurant);
+
+    app.post('/api/order/restaurant/:rId', checkRestaurant, makeOrder);
 };

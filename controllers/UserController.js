@@ -71,7 +71,7 @@ module.exports = (app) => {
     const checkUsername = (req, res, next) => {
         userDao.findUser({username: req.body.username})
             .then((user) => {
-                if (user) {
+                if (user && user.username !== req.body.username) {
                     res.status(403).send({"message": "username is used by someone else"});
                 } else {
                     next();

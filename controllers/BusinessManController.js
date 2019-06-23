@@ -17,10 +17,12 @@ module.exports = (app) => {
 
     const claimRestaurant = (req, res) => {
         const yelpId = req.params['yelpId'];
+        const name = req.query['name'];
         if (req.session.userId
             && req.session.userType === 'BusinessMan') {
             RestaurantDao.createRestaurant(
                 {
+                    name: name,
                     yelpId: yelpId
                 }
             ).then((restaurant) =>
